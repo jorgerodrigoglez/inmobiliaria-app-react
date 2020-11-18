@@ -1,4 +1,4 @@
-/* eslint-disable react/react-in-jsx-scope */
+
 import React from 'react';
 import { List, Link, ListItem, Avatar, ListItemText } from '@material-ui/core';
 

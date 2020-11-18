@@ -1,7 +1,6 @@
 export const iniciarSesion = (dispatch, firebase, email, password) => {
-    return new Promise((resolve, reject) => {
-        firebase
-        .auth
+    return new Promise((resolve, eject) => {
+        firebase.auth        
         .signInWithEmailAndPassword(email, password)
         .then(auth => {
             firebase.db
@@ -19,17 +18,16 @@ export const iniciarSesion = (dispatch, firebase, email, password) => {
             });
         })
         .catch(error => {
-            console.log("error", error);
+            //console.log("error", error);
             resolve({status: false, mensaje: error});
         });
     }); 
 };
 
 export const crearUsuario = (dispatch, firebase, usuario) => {
-    return new Promise((resolve, reject) => {
-        firebase
-        .auth
-        .createUserWithEmailAndPassword(usuario.email, usuario.password)
+    return new Promise((resolve, eject) => {
+        firebase.auth      
+        .createUserWithEmailAndPassword(usuario.email,usuario.password)
         .then(auth => {
             firebase.db
             .collection("usuarios")
@@ -52,18 +50,15 @@ export const crearUsuario = (dispatch, firebase, usuario) => {
             })
         })
         .catch(error => {
-            console.log("error", error);
+            //console.log("error", error);
             resolve({status: false, mensaje: error});
         });
     });
 };
 
 export const salirSesion = (dispatch, firebase) => {
-    return new Promise((resolve, reject) => {
-        firebase
-        .auth
-        .signOut()
-        .then(salir => {
+    return new Promise((resolve, eject) => {
+        firebase.auth.signOut().then(salir => {
             dispatch({
                 type : "SALIR_SESION",
                 nuevoUsuario : {

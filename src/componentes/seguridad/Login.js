@@ -6,8 +6,9 @@ import { compose } from 'recompose';
 import { consumerFirebase } from '../../server';
 
 import{ iniciarSesion } from '../../sesion/actions/sesionAction';
-import { StateContext } from '../../sesion/store';
 import{ openMensajePantalla } from '../../sesion/actions/snackbarAction';
+
+import { StateContext } from '../../sesion/store';
 
 const style = {
     paper:{
@@ -42,7 +43,6 @@ class Login extends Component {
         if(nextProps.firebase === prevState.firebase){
             return null;
         }
-
         return{
             firebase : nextProps.firebase
         }
@@ -71,7 +71,7 @@ class Login extends Component {
             console.log(error);
         })*/
 
-        const[{sesion}, dispatch ] = this.context;
+        const [{sesion}, dispatch ] = this.context;
         const { firebase, usuario } = this.state;
         const { email, password } = usuario;
         let callback = await iniciarSesion(dispatch,firebase,email,password);
@@ -99,7 +99,7 @@ class Login extends Component {
                     <form style={style.form}>
                         <TextField
                             variant="outlined"
-                            label="E=Mail"
+                            label="Email"
                             name="email"
                             fullWidth
                             margin="normal"

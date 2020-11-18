@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useStateValue } from '../../sesion/store';
-import reactFoto from '../../logo.svg';
 import { Typography, TextField, Button, Grid, Container, Avatar } from "@material-ui/core";
 import { consumerFirebase } from '../../server';
 import { openMensajePantalla } from "../../sesion/actions/snackbarAction";
+import reactFoto from '../../logo.svg';
 
-import imageUploader from 'react-images-upload';
-import { v4 as uuid } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
+import ImageUploader from 'react-images-upload';
 
 const style = {
     paper:{
@@ -85,7 +85,7 @@ const PerfilUsuario = props => {
         //1.Capturar la imagen
         const foto = fotos[0];
         //2.Renombrar la foto
-        const claveUnicaFoto = uuid.v4();
+        const claveUnicaFoto = uuidv4();
         //3.Obtener el nombre de la foto
         const nombreFoto = foto.name;
         //4.Obtener la extensión de la imagen
@@ -97,26 +97,26 @@ const PerfilUsuario = props => {
             firebase.devolverDocumento(alias).then(urlFoto => {
                 estado.foto = urlFoto;
                 firebase.db
-                .collection("usuarios")
-                .doc(firebase.auth.currentUser.uid)
-                .set(
-                    {
-                        foto : urlFoto
-                    },
-                    {merge: true}
-                )
-                .then(userDB => {
-                    dispatch({
-                        type: "INICIAR_SESION",
-                        sesion : estado,
-                        autenticado : true
+                    .collection("usuarios")
+                    .doc(firebase.auth.currentUser.uid)
+                    .set(
+                        {
+                            foto : urlFoto
+                        },
+                        {merge: true}
+                    )
+                    .then(userDB => {
+                        dispatch({
+                            type: "INICIAR_SESION",
+                            sesion : estado,
+                            autenticado : true
                     })
                 })
             })
         })
     }
 
-    let fotoKey = uuid();
+    let fotoKey = uuidv4();
 
     return sesion ? (
         <Container component="main" maxWidth="md" justify="center">
@@ -144,7 +144,7 @@ const PerfilUsuario = props => {
                             variant="outlined"
                             fullWidth
                             label="Apellidos"
-                            //value={estado.apellido}
+                            value={estado.apellido}
                             onChange={cambiarDato}
                             />
                         </Grid>
@@ -155,7 +155,7 @@ const PerfilUsuario = props => {
                             variant="outlined"
                             fullWidth
                             label="E-Mail"
-                            //value={estado.email}
+                            value={estado.email}
                             onChange={cambiarDato}
                             />
                         </Grid>
@@ -166,7 +166,7 @@ const PerfilUsuario = props => {
                             variant="outlined"
                             fullWidth
                             label="Telefono"
-                            //value={estado.telefono}
+                            value={estado.telefono}
                             onChange={cambiarDato}
                             />
                         </Grid>

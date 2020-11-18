@@ -4,15 +4,15 @@ import { Toolbar, Typography, IconButton, Drawer, Avatar } from '@material-ui/co
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
-import { MenuDerecha } from './menuDerecha';
-import { MenuIzquierda } from './menuIzquierda';
-
 import { withRouter, Link } from "react-router-dom";
 import { compose } from 'recompose';
 
 import { consumerFirebase } from '../../../server';
 import { StateContext } from '../../../sesion/store';
 import { salirSesion } from '../../../sesion/actions/sesionAction';
+
+import { MenuDerecha } from './menuDerecha';
+import { MenuIzquierda } from './menuIzquierda';
 import fotoUsuarioTemp from '../../../logo.svg';
 
 
@@ -48,6 +48,7 @@ const styles = theme => ({
 })
 
 class BarSession extends Component {
+    
     static contextType = StateContext;
 
     state = {
@@ -60,7 +61,7 @@ class BarSession extends Component {
         const firebase = this.state;
         const [{sesion}, dispatch] = this.context;
 
-        salirSesion(dispatch.firebase).then(success => {
+        salirSesion(dispatch, firebase).then(success => {
             this.props.history.push("/login");
         })
     }
@@ -75,8 +76,7 @@ class BarSession extends Component {
 
     static getDerivedStateFromProps(nextProps, prevState){
         let nuevosObjetos = {};
-
-        if(nextProps.firebase === prevState.firebase){
+        if(nextProps.firebase !== prevState.firebase){
             nuevosObjetos.firebase = nextProps.firebase;
         }
         return nuevosObjetos;
@@ -95,19 +95,19 @@ class BarSession extends Component {
                 onClose={this.toggleDrawer("right", false)}
                 anchor="right"
             >
-                <div
-                    role="button"
-                    onClick={this.toggleDrawer("right", false)}
-                    onKeyDown={this.toggleDrawer("right", false)}
-                >
-                    <MenuDerecha 
-                        classes = {classes} 
-                        usuario = {usuario} 
-                        //textoUsuario = {textoUsuario}
-                        //fotoUsuario = {usuario.foto || fotoUsuarioTemp}
-                        salirSesion = {this.salirSesionApp}
-                    / >
-                </div>
+            <div
+                role="button"
+                onClick={this.toggleDrawer("right", false)}
+                onKeyDown={this.toggleDrawer("right", false)}
+            >
+                <MenuDerecha 
+                    classes = {classes} 
+                    usuario = {usuario} 
+                    //textoUsuario = {textoUsuario}
+                    //fotoUsuario = {usuario.foto || fotoUsuarioTemp}
+                    salirSesion = {this.salirSesionApp}
+                />
+            </div>
             </Drawer>
 
             <Drawer
@@ -140,10 +140,12 @@ class BarSession extends Component {
                     <IconButton color="inherit" component={Link} to="">
                         <i className="material-icons">mail_outline</i>
                     </IconButton>
+                    
                     <Button color="inherit" onClick={this.salirSesionApp}>Salir</Button>
                     <Button color="inherit">{/*textoUsuario*/}</Button>
+           
                     <Avatar
-                        //src={usuario.foto || fotoUsuarioTemp}
+                        src={/*usuario.foto ||*/ fotoUsuarioTemp}
                     >
                     </Avatar>
                 </div>
@@ -152,7 +154,7 @@ class BarSession extends Component {
                     <IconButton color="inherit"
                         onClick = {this.toggleDrawer("right", true)}
                     >
-                    <i className="material-icons">more_vert</i>
+                        <i className="material-icons">more_vert</i>
                     </IconButton>
                 </div>
 
@@ -162,8 +164,4 @@ class BarSession extends Component {
     }
 }
 
-export default compose(
-    withRouter,
-    consumerFirebase, 
-    withStyles(styles)
-) (BarSession);
+export default compose(withStyles(styles),consumerFirebase, withRouter) (BarSession);

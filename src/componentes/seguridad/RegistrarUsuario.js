@@ -6,8 +6,9 @@ import { compose } from 'recompose';
 import { consumerFirebase } from '../../server';
 
 import { crearUsuario } from '../../sesion/actions/sesionAction';
-import { StateContext } from '../../sesion/store';
 import { openMensajePantalla } from '../../sesion/actions/snackbarAction';
+
+import { StateContext } from '../../sesion/store';
 
 const style = {
     paper : {
@@ -74,7 +75,7 @@ class RegistrarUsuario extends Component {
 
     registrarUsuario = async e => {
         e.preventDefault();
-        console.log('imprimir objeto usuario del state', this.state.usuario);
+        //console.log('imprimir objeto usuario del state', this.state.usuario);
         
         /*const { usuario, firebase } = this.state;
 
@@ -87,7 +88,7 @@ class RegistrarUsuario extends Component {
                 email : usuario.email,
                 nombre : usuario.nombre,
                 apellido : usuario.apellido
-            }
+            };
 
             firebase.db
             .collection("usuarios")

@@ -22,6 +22,7 @@ const styles = theme => ({
 })
 
 class AppNavbar extends Component {
+    
     static contextType = StateContext;
     
     state = {
@@ -29,22 +30,22 @@ class AppNavbar extends Component {
     }
 
     componentDidMount(){
-        const { firebase } = this.state; //local state
-        const [{sesion}, dispatch] = this.context; //global state
+        const { firebase } = this.state; 
+        const [{sesion}, dispatch] = this.context; 
 
-        if(firebase.auth.currentUser !== null && !sesion){
+        if(firebase.auth.currentUser === null && !sesion){
             firebase.db
-                .collection("usuarios")
-                .doc(firebase.auth.currentUser.uid)
-                .get()
-                .then(doc => {
-                    const usuarioDB = doc.data();
-                    dispatch({
-                        type : "INICIAR_SESION",
-                        sesion: usuarioDB,
-                        autenticado: true
-                    });
+            .collection("usuarios")
+            .doc(firebase.auth.currentUser.uid)
+            .get()
+            .then(doc => {
+                const usuarioDB = doc.data();
+                dispatch({
+                    type : "INICIAR_SESION",
+                    sesion: usuarioDB,
+                    autenticado: true
                 });
+            });
         }
     }
 
@@ -66,9 +67,9 @@ class AppNavbar extends Component {
       
                </AppBar>
             </div>
-        )
-        :null
-        )
+            )
+            :null
+            )
         :null;
     }
 }

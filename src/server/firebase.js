@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';
+import app from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/storage';
@@ -16,18 +16,32 @@ const config = {
 
 class Firebase {
     constructor(){
-        firebase.initializeApp(config).firestore();
-        this.db = firebase.firestore();
-        this.auth = firebase.auth();
-        this.storage = firebase.storage();
+        app.initializeApp(config).firestore();
+        this.db = app.firestore();
+        this.auth = app.auth();
+        this.storage = app.storage();
+
+        this.storage.ref().constructor.prototype.guardarDocumentos = function(documentos){
+            var ref = this;
+            return Promise.all(documentos.map(function(file){
+                return ref.child(file.alias).put(file).then(snapshot=>{
+                    return ref.child(file.alias).getDownloadURL();
+                })
+            }))
+        }
     }
+    // de app.js
     estaIniciado(){
         return new Promise(resolve => {
             this.auth.onAuthStateChanged(resolve)
         })
     }
-    guardarDocumento = (nombreDocumento, documento) => this.storage.ref().child(nombreDocumento).out(documento);
+
+    guardarDocumento = (nombreDocumento, documento) => this.storage.ref().child(nombreDocumento).put(documento);
+    
     devolverDocumento = (documentoUrl) => this.storage.ref().child(documentoUrl).getDownloadURL();
+
+    guardarDocumentos = (documentos) => this.storage.ref().guardarDocumentos(documentos);
 }
 
 

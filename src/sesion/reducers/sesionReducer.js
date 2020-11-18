@@ -1,4 +1,4 @@
-/* eslint-disable default-case */
+
 export const initialState = {
     usuario : {
         nombre : "",
